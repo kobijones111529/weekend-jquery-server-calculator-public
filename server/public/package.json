@@ -12,10 +12,10 @@
   "author": "Kobi Jones",
   "license": "ISC",
   "type": "module",
-  "devDependencies": {
-    "vite": "^4.2.1"
-  },
   "dependencies": {
     "jquery": "^3.6.4"
+  },
+  "devDependencies": {
+    "vite": "^4.2.1"
   }
 }
