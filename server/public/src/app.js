@@ -19,6 +19,10 @@ export function main () {
   // Listen for calculator form submission
   const jqCalculator = $('#calculator')
   jqCalculator.on('submit', handleCalculate)
+
+  // Listen for calculator clear request
+  const jqClear = $('button[name=clear]')
+  jqClear.on('click', handleClear)
 }
 
 /**
@@ -47,4 +51,16 @@ function handleCalculate (event) {
       renderResult(Number(result))
     })
   })
+}
+
+/**
+ * Handle calculator clear button click
+ * @param {MouseEvent} event Button click event
+ */
+function handleClear (event) {
+  const jqButton = $(event.target)
+  const jqForm = jqButton.parents('form')
+  jqForm.find('input[name=operation]:checked').prop('checked', false)
+  jqForm.find('input[name=left]').val('')
+  jqForm.find('input[name=right]').val('')
 }
