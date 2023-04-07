@@ -1,5 +1,6 @@
 import express from 'express'
 
+// 'Database'
 const state = {
   history: []
 }
@@ -11,34 +12,49 @@ class InvalidInputError extends Error {
   }
 }
 
-const calculate = operation => (left, right) => {
-  if (typeof (left) !== 'number' || typeof (right) !== 'number') {
-    throw new TypeError('Input type must be number')
+/**
+ * My Little Calculator™
+ * @param {string} operation Binary mathematical operation
+ * @returns Resulting binary function
+ */
+const calculate = operation =>
+  /**
+   * @param {number} left Left argument
+   * @param {number} right Right argument
+   * @returns {number} Result
+   */
+  (left, right) => {
+    if (typeof (left) !== 'number' || typeof (right) !== 'number') {
+      throw new TypeError('Input type must be number')
+    }
+
+    // Pattern match (kinda) on operation
+    switch (operation) {
+      case 'add':
+        return left + right
+      case 'subtract':
+        return left - right
+      case 'multiply':
+        return left * right
+      case 'divide':
+        return left / right
+      default:
+        throw new InvalidInputError('Invalid operation')
+    }
   }
 
-  switch (operation) {
-    case 'add':
-      return left + right
-    case 'subtract':
-      return left - right
-    case 'multiply':
-      return left * right
-    case 'divide':
-      return left / right
-    default:
-      throw new InvalidInputError('Invalid operation')
-  }
-}
-
+// Create server
 const app = express()
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static('server/public/dist'))
 
+// GET route for calculator history
 app.get('/history', (_req, res) => {
   res.send({ history: state.history })
 })
 
+// POST route for running and saving calculation
 app.post('/calculate', (req, res) => {
   const input = {
     operation: req.body.operation,
@@ -60,6 +76,7 @@ app.post('/calculate', (req, res) => {
   }
 })
 
+// Start server
 const port = process.env.PORT || 5000
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`)
