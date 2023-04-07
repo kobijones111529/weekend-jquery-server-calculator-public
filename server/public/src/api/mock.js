@@ -1,6 +1,13 @@
 // 'Database'
 const state = {
-  history: []
+  history: [{
+    input: {
+      operation: 'add',
+      left: 1,
+      right: 4
+    },
+    result: 5
+  }]
 }
 
 // Run and store calculation

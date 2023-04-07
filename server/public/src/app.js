@@ -1,6 +1,6 @@
 import $ from 'jquery'
-import api from './api'
-import { renderResult } from './render'
+import api from './api/mock'
+import { renderResult, renderHistory } from './render'
 
 /**
  * Application entry point
@@ -14,6 +14,8 @@ export function main () {
 
     const result = history[history.length - 1].result
     renderResult(Number(result))
+
+    renderHistory(history)
   })
 
   // Listen for calculator form submission
@@ -49,6 +51,8 @@ function handleCalculate (event) {
       // Rerender result
       const result = history[history.length - 1].result
       renderResult(Number(result))
+
+      renderHistory(history)
     })
   })
 }
