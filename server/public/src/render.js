@@ -1,4 +1,5 @@
 import $ from 'jquery'
+import { InvalidInputError } from './util'
 
 /**
  * Render result to DOM
@@ -30,7 +31,7 @@ export function renderHistory (history) {
       case 'divide':
         return '÷'
       default:
-        throw new Error('Invalid input') // TODO make custom error class
+        throw new InvalidInputError('Invalid operation')
     }
   }
 
@@ -40,10 +41,18 @@ export function renderHistory (history) {
   history.reduce((jqList, calculation) => {
     const input = calculation.input
     const result = calculation.result
-    const sybmol = symbolFor(input.operation)
-    jqList.append(`
-      <li>${input.left} ${sybmol} ${input.right} = ${result}</li>
-    `)
+    try {
+      const sybmol = symbolFor(input.operation)
+      jqList.append(`
+        <li>${input.left} ${sybmol} ${input.right} = ${result}</li>
+      `)
+    } catch (e) {
+      if (e instanceof InvalidInputError) {
+        jqList.append(`
+          <li>Unknown operation</li>
+        `)
+      }
+    }
     return jqList
   }, jqList)
 }
