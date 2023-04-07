@@ -12,7 +12,7 @@ export function main () {
       return
     }
 
-    const result = history[history.length - 1].result
+    const result = history[0].result
     renderResult(Number(result))
 
     renderHistory(history)
@@ -60,8 +60,8 @@ function handleCalculate (event) {
  * @param {MouseEvent} event Button click event
  */
 function handleClear (event) {
-  const jqButton = $(event.target)
-  const jqForm = jqButton.parents('form')
+  const jqClear = $(event.target)
+  const jqForm = jqClear.parents('form')
   jqForm.find('input[name=operation]:checked').prop('checked', false)
   jqForm.find('input[name=left]').val('')
   jqForm.find('input[name=right]').val('')
