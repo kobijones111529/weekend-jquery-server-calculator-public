@@ -35,18 +35,16 @@ function handleCalculate (event) {
   // Prevent page reload
   event.preventDefault()
 
-  const jqForm = $(event.target)
-  const jqOperation = jqForm.find('input[name=operation]:checked')
-  const jqLeft = jqForm.find('input[name=left]')
-  const jqRight = jqForm.find('input[name=right]')
+  const input = readCalculatorInput($(event.target))
 
-  // Read input fields
-  const operation = jqOperation.val()
-  const left = jqLeft.val()
-  const right = jqRight.val()
+  const parsedInput = {
+    operation: input.operation,
+    left: Number(input.left),
+    right: Number(input.right)
+  }
 
   // Make requests to API
-  api.calculate(operation, Number(left), Number(right)).then(() => {
+  api.calculate(parsedInput.operation, parsedInput.left, parsedInput.right).then(() => {
     api.getHistory().then(history => {
       // Rerender result
       const result = history[0].result
@@ -67,4 +65,21 @@ function handleClear (event) {
   jqForm.find('input[name=operation]:checked').prop('checked', false)
   jqForm.find('input[name=left]').val('')
   jqForm.find('input[name=right]').val('')
+}
+
+/**
+ * Read calculator form input fields
+ * @param {JQuery<HTMLFormElement>} jqForm jQuery form element
+ * @returns {object} Calculator input
+ */
+function readCalculatorInput (jqForm) {
+  const jqOperation = jqForm.find('input[name=operation]:checked')
+  const jqLeft = jqForm.find('input[name=left]')
+  const jqRight = jqForm.find('input[name=right]')
+
+  return {
+    operation: jqOperation.val(),
+    left: jqLeft.val(),
+    right: jqRight.val()
+  }
 }
