@@ -1,4 +1,4 @@
-import express from 'express';
+import express from 'express'
 
 const state = {
   history: []
@@ -12,7 +12,7 @@ class InvalidInputError extends Error {
 }
 
 const calculate = operation => (left, right) => {
-  if (typeof(left) !== 'number' || typeof(right) !== 'number') {
+  if (typeof (left) !== 'number' || typeof (right) !== 'number') {
     throw new TypeError('Input type must be number')
   }
 
@@ -30,10 +30,10 @@ const calculate = operation => (left, right) => {
   }
 }
 
-const app = express();
+const app = express()
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static('server/public/dist'));
+app.use(express.urlencoded({ extended: true }))
+app.use(express.static('server/public/dist'))
 
 app.get('/history', (_req, res) => {
   res.send({ history: state.history })
@@ -58,9 +58,9 @@ app.post('/calculate', (req, res) => {
       throw e
     }
   }
-});
+})
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5000
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+  console.log(`Server running at http://localhost:${port}`)
+})
