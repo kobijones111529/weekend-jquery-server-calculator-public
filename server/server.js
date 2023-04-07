@@ -64,7 +64,7 @@ app.post('/calculate', (req, res) => {
 
   try {
     const result = calculate(input.operation)(input.left, input.right)
-    state.history.push({ input, result })
+    state.history.unshift({ input, result })
     res.sendStatus(201)
   } catch (e) {
     if (e instanceof InvalidInputError) {

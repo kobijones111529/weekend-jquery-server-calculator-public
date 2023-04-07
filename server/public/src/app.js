@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import api from './api/mock'
+import api from './api'
 import { renderResult, renderHistory } from './render'
 
 /**
@@ -49,7 +49,7 @@ function handleCalculate (event) {
   api.calculate(operation, Number(left), Number(right)).then(() => {
     api.getHistory().then(history => {
       // Rerender result
-      const result = history[history.length - 1].result
+      const result = history[0].result
       renderResult(Number(result))
 
       renderHistory(history)
