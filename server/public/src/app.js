@@ -1,19 +1,19 @@
 import $ from 'jquery'
 import api from './api'
+import { renderResult } from './render'
 
 /**
  * Application entry point
  */
 export function main () {
   // Initial render of result
-  const jqResult = $('#result')
   api.getHistory().then(history => {
     if (history.length === 0) {
       return
     }
 
     const result = history[history.length - 1].result
-    jqResult.text(result)
+    renderResult(Number(result))
   })
 
   // Listen for calculator form submission
@@ -44,8 +44,7 @@ function handleCalculate (event) {
     api.getHistory().then(history => {
       // Rerender result
       const result = history[history.length - 1].result
-      console.log(history[history.length - 1])
-      $('#result').text(Number(result))
+      renderResult(Number(result))
     })
   })
 }
