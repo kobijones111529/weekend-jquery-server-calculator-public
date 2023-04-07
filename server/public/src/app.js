@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import api from './api/mock'
+import api from './api'
 
 export function main () {
   const jqResult = $('#result')
