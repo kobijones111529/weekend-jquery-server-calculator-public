@@ -1,0 +1,21 @@
+{
+  "name": "public",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "watch": "vite build --watch"
+  },
+  "author": "Kobi Jones",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "vite": "^4.2.1"
+  },
+  "dependencies": {
+    "jquery": "^3.6.4"
+  }
+}
