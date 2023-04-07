@@ -1,9 +1,9 @@
 import $ from 'jquery'
-import mockAPI from './api/mock'
+import api from './api/mock'
 
 export function main () {
   const jqResult = $('#result')
-  mockAPI.getHistory().then(history => {
+  api.getHistory().then(history => {
     if (history.length === 0) {
       return
     }
@@ -32,8 +32,8 @@ function handleCalculate (event) {
   const left = jqLeft.val()
   const right = jqRight.val()
 
-  mockAPI.calculate(operation, Number(left), Number(right)).then(() => {
-    mockAPI.getHistory().then(history => {
+  api.calculate(operation, Number(left), Number(right)).then(() => {
+    api.getHistory().then(history => {
       const result = history[history.length - 1].result
       console.log(history[history.length - 1])
       $('#result').text(Number(result))
