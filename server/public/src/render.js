@@ -35,9 +35,10 @@ export function renderHistory (history) {
     }
   }
 
-  // Clear and rerender
   const jqList = $('#history')
+  // Clear
   jqList.empty()
+  // Rerender
   history.reduce((jqList, calculation) => {
     const input = calculation.input
     const result = calculation.result
