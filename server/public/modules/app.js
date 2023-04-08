@@ -1,6 +1,6 @@
 import $ from 'jquery'
-import api from './api'
-import { renderResult, renderHistory } from './render'
+import api from './api.js'
+import { renderResult, renderHistory } from './render.js'
 
 /**
  * Application entry point

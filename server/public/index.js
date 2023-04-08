@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import { main } from './src/app'
+import { main } from './modules/app.js'
 
 // Start
 $(document).ready(main)

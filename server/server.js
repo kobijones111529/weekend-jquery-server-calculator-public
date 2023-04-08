@@ -47,7 +47,7 @@ const calculate = operation =>
 const app = express()
 
 app.use(express.urlencoded({ extended: true }))
-app.use(express.static('server/public/dist'))
+app.use(express.static('server/public'))
 
 // GET route for calculator history
 app.get('/history', (_req, res) => {

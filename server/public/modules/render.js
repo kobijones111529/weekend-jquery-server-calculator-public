@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import { InvalidInputError } from './util'
+import { InvalidInputError } from './util.js'
 
 /**
  * Render result to DOM
