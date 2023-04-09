@@ -1,4 +1,6 @@
 import $ from 'jquery'
+import * as exp from './parser/expression.js'
+import * as parser from './parser.js'
 
 /**
  * Initialize advanced calculator
@@ -29,6 +31,13 @@ export function init (jqForm) {
 function handleSubmit (event) {
   // Prevent page reload
   event.preventDefault()
+
+  const jqForm = $(event.target)
+  const jqExpression = jqForm.find('input[name=expression]')
+  const expression = jqExpression.val()
+
+  const fullParser = (exp.expression).withSuffix(() => parser.end)
+  console.log(fullParser.run(expression.split('')))
 }
 
 /**
