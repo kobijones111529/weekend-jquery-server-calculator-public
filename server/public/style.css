@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'Noto Sans Math';
+  src: url('NotoSansMath-Regular.ttf');
+}
+
 .hidden {
   display: none;
 }
@@ -22,6 +27,7 @@
 
 #advanced-calculator input[name=expression] {
   flex: auto;
+  font-family: 'Noto Sans Math', sans-serif;
 }
 
 #advanced-calculator-buttons {
