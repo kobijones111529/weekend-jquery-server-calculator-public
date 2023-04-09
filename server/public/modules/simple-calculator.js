@@ -21,6 +21,8 @@ function handleCalculate (event) {
   // Prevent page reload
   event.preventDefault()
 
+  const jqForm = $(event.target)
+
   const input = readCalculatorInput($(event.target))
 
   const parsedInput = {
@@ -32,6 +34,8 @@ function handleCalculate (event) {
   // Make requests to API
   api.calculate(parsedInput.operation, parsedInput.left, parsedInput.right).then(() => {
     api.getHistory().then(history => {
+      clear(jqForm)
+
       // Rerender result
       const result = history[0].result
       renderResult(Number(result))
@@ -48,9 +52,18 @@ function handleCalculate (event) {
 function handleClear (event) {
   const jqClear = $(event.target)
   const jqForm = jqClear.parents('form')
+  clear(jqForm)
+}
+
+/**
+ * Clear form
+ * @param {*} jqForm Calculator form
+ */
+function clear (jqForm) {
   jqForm.find('input[name=operation]:checked').prop('checked', false)
   jqForm.find('input[name=left]').val('')
   jqForm.find('input[name=right]').val('')
+  jqForm.find('input[autofocus]').focus()
 }
 
 /**
