@@ -8,7 +8,7 @@
     "dev": "nodemon server/server.js"
   },
   "author": "Kobi Jones",
-  "license": "GPLv3",
+  "license": "MIT",
   "type": "module",
   "dependencies": {
     "express": "^4.18.2"
