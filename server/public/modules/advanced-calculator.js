@@ -5,8 +5,13 @@ import $ from 'jquery'
  * @param {JQuery<HTMLFormElement>} jqElem Calculator jQuery element
  */
 export function init (jqForm) {
+  // Handle form submission
   jqForm.on('submit', handleSubmit)
+
+  // Handle calculator button clicks
   jqForm.on('click', 'button', handleButtonClick)
+
+  // Handle calculator button mousedown events
   jqForm.on('mousedown', 'button', function (event) {
     // Prevent mousedown from moving focus
     event.preventDefault()
@@ -32,18 +37,18 @@ function handleSubmit (event) {
  */
 function handleButtonClick (event) {
   const jqButton = $(event.target)
-
-  const jqExpression = jqButton.parents('form').find('input[name=expression]')
-  const expressionInput = jqExpression.get()[0]
+  const jqForm = jqButton.parents('form')
+  const jqExpression = jqForm.find('input[name=expression]')
+  const expressionElement = jqExpression.get()[0]
   jqExpression.focus()
 
   // Expression input should be an input element
-  if (!(expressionInput instanceof window.HTMLInputElement)) return
+  if (!(expressionElement instanceof window.HTMLInputElement)) return
 
-  const selectionStart = expressionInput.selectionStart
-  const selectionEnd = expressionInput.selectionEnd
-  const selectionDirection = expressionInput.selectionDirection
-  const expression = expressionInput.value
+  const selectionStart = expressionElement.selectionStart
+  const selectionEnd = expressionElement.selectionEnd
+  const selectionDirection = expressionElement.selectionDirection
+  const expression = expressionElement.value
   const input = {
     before: expression.slice(0, selectionStart),
     after: expression.slice(selectionEnd)
@@ -69,10 +74,10 @@ function handleButtonClick (event) {
   ])
   const symbol = nameSymbolMap.get(buttonName)
   if (symbol !== undefined) {
-    expressionInput.setSelectionRange(null, null, selectionDirection)
-    expressionInput.value = input.before + symbol + input.after
+    expressionElement.setSelectionRange(null, null, selectionDirection)
+    expressionElement.value = input.before + symbol + input.after
     const newSelectionEnd = input.before.length + symbol.length
-    expressionInput.setSelectionRange(newSelectionEnd, newSelectionEnd, selectionDirection)
+    expressionElement.setSelectionRange(newSelectionEnd, newSelectionEnd, selectionDirection)
   }
 }
 
@@ -84,6 +89,7 @@ function handleExpressionBeforeInput (event) {
   // Ignore delete events
   if (event.data === null) return
 
+  // Handle input manually for more control
   event.preventDefault()
 
   const expressionElement = event.target
@@ -91,24 +97,31 @@ function handleExpressionBeforeInput (event) {
   // Expression input should be an input element
   if (!(expressionElement instanceof window.HTMLInputElement)) return
 
-  const selectionStart = expressionElement.selectionStart
-  const selectionEnd = expressionElement.selectionEnd
-  const selectionDirection = expressionElement.selectionDirection
+  // Get cursor selection
+  const selection = {
+    start: expressionElement.selectionStart,
+    end: expressionElement.selectionEnd,
+    direction: expressionElement.selectionDirection
+  }
   const expression = expressionElement.value
-  const input = {
-    before: expression.slice(0, selectionStart),
-    after: expression.slice(selectionEnd)
+  // Segment expression by cursor selection
+  const segments = {
+    before: expression.slice(0, selection.start),
+    after: expression.slice(selection.end)
   }
 
+  // Transform new input
   const charMap = [
     ['-', '−']
   ]
   const newInput = charMap.reduce((str, [key, value]) => {
     const newStr = str.replace(key, value)
     return newStr
-  }, event.data === null ? '' : event.data)
-  expressionElement.setSelectionRange(null, null, selectionDirection)
-  expressionElement.value = input.before + newInput + input.after
-  const newSelectionEnd = input.before.length + newInput.length
-  expressionElement.setSelectionRange(newSelectionEnd, newSelectionEnd, selectionDirection)
+  }, event.data === null ? '' : event.data) // null means no new input text
+
+  // Update expression element value and cursor selection
+  expressionElement.setSelectionRange(null, null)
+  expressionElement.value = segments.before + newInput + segments.after
+  const newSelectionEnd = segments.before.length + newInput.length
+  expressionElement.setSelectionRange(newSelectionEnd, newSelectionEnd, selection.direction)
 }
