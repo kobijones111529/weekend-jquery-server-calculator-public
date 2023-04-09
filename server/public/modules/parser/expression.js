@@ -11,16 +11,6 @@ export const add = parser.one(c => c === '+')
 
 export const multiply = parser.one(c => c === '*')
 
-// export const expression = number.apply(
-//   multiply.or(() => add).map(op => left =>
-//     [left, op]
-//   )
-// ).apply(
-//   number.map(right => ([left, op]) =>
-//     [left, op, right]
-//   )
-// )
-
 export const inParens = p =>
   parser
     .one(c => c === '(')

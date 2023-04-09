@@ -6,6 +6,9 @@ export class ParserError extends Error {
   }
 }
 
+/**
+ * Left case of either monad
+ */
 export class Left {
   constructor (value) {
     this.value = value
@@ -41,6 +44,9 @@ export class Left {
   }
 }
 
+/**
+ * Right case of either monad
+ */
 export class Right {
   constructor (value) {
     this.value = value
@@ -75,16 +81,32 @@ export class Right {
   }
 }
 
+/**
+ * Unwrap either
+ * @param {function} left Map left
+ * @param {function} right Map right
+ * @param {Left | Right} either Either
+ */
 export const either = (left, right, either) => {
   return either instanceof Left ? left(either.value) : right(either.value)
 }
 
+/**
+ * Parser combinator
+ */
 export class Parser {
+  /**
+   * Create a new parser
+   * @param {function} run Parsing function
+   */
   constructor (run) {
     this.run = run
   }
 
-  // Functor map
+  /**
+   * Functor map
+   * @param {*} fn Function to apply
+   */
   map (fn) {
     return new Parser(input =>
       this
@@ -97,7 +119,7 @@ export class Parser {
 
   /**
    * Applicative apply
-   * @param {Parser} parser Parser to apply
+   * @param {function} parser Parser to apply (lazy)
    */
   apply (parser) {
     return new Parser(input =>
@@ -112,16 +134,24 @@ export class Parser {
 
   /**
    * Applicative apply, ignoring previous result
-   * @param {Parser} parser Parser 2 electric boogaloo
+   * @param {function} parser Parser 2 electric boogaloo (lazy)
    */
   seq (parser) {
     return this.apply(() => parser().map(output => _ => output))
   }
 
+  /**
+   * Apply and ignore left output
+   * @param {function} parser Suffix (lazy)
+   */
   prefixOf (parser) {
     return this.apply(() => parser().map(output => _ => output))
   }
 
+  /**
+   * Apply and ignore right output
+   * @param {*} parser Suffix (lazy)
+   */
   withSuffix (parser) {
     return this.apply(() => parser().map(_ => output => output))
   }
@@ -140,6 +170,10 @@ export class Parser {
     )
   }
 
+  /**
+   * Alternative
+   * @param {function} parser Alternate parser (lazy)
+   */
   or (parser) {
     return new Parser(input =>
       this
@@ -148,12 +182,31 @@ export class Parser {
     )
   }
 
+  /**
+   * Match zero or more times
+   */
   many () {
-    return (this.apply(() => this.many().map(b => a => [a, ...b]))).or(() => Parser.pure([]))
+    return this.apply(() =>
+      // Recurse
+      this
+        .many()
+        .map(b => a => [a, ...b])
+    ).or(() =>
+      // End
+      Parser.pure([])
+    )
   }
 
+  /**
+   * Match one or more times
+   */
   some () {
-    return this.apply(() => this.many().map(b => a => [a, ...b]))
+    return this.apply(() =>
+      // Match remaining
+      this
+        .many()
+        .map(b => a => [a, ...b])
+    )
   }
 
   /**
@@ -164,6 +217,10 @@ export class Parser {
     return new Parser(input => new Right([input, value]))
   }
 
+  /**
+   * Parser error
+   * @param {*} value Value to be lifted
+   */
   static error (value) {
     return new Parser(input => new Left([input, value]))
   }
@@ -211,10 +268,7 @@ export const many = fn => new Parser(input => {
 export const some = fn => {
   const required = one(fn)
   const extra = many(fn)
-  const appendExtra = extra.map(rest => first => {
-    rest.unshift(first)
-    return rest
-  })
+  const appendExtra = extra.map(rest => first => [first, ...rest])
   return required.apply(() => appendExtra)
 }
 
@@ -225,8 +279,4 @@ export const end = new Parser(input => {
   if (input.length === 0) return new Right([[], null])
 
   return new Left('expected end of input')
-})
-
-export const id = new Parser(input => {
-  return new Right([input, null])
 })
