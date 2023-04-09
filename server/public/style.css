@@ -1,0 +1,41 @@
+@font-face {
+  font-family: 'Noto Sans Math';
+  src: url('NotoSansMath-Regular.ttf');
+}
+
+.hidden {
+  display: none;
+}
+
+#advanced-calculator {
+  max-width: 512px;
+
+  display: flex;
+  flex-flow: column;
+}
+
+#advanced-calculator-header {
+  display: flex;
+  flex-flow: row;
+}
+
+#advanced-calculator-header * {
+  padding: 8px 20px;
+  font-size: 2rem;
+  text-align: center;
+}
+
+#advanced-calculator input[name=expression] {
+  flex: auto;
+  font-family: 'Noto Sans Math', sans-serif;
+}
+
+#advanced-calculator-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+#advanced-calculator-buttons * {
+  padding: 8px 20px;
+  font-size: 2rem;
+}
